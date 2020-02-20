@@ -2,5 +2,6 @@ bin/
 output/
 *.test
 vendor/
+es-data/
 
 rest-playground.http
