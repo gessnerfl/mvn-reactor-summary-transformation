@@ -11,7 +11,7 @@ the same release and the tool will just add all of them with an iteration counte
 ### CSV
 
 1. Clone this repository
-2. Run the program `go run main.go -src=PATH_TO_BUILD_SUMMARIES -fmt=csv -out=PATH_TO_CSV_FILE
+2. Run the program `go run main.go -src=PATH_TO_BUILD_SUMMARIES -fmt=csv -out=PATH_TO_CSV_FILE`
 
 The CSV file will contain the following data:
 `"Release", "Build Iteration", "Module", "Duration (ms)"`
@@ -20,7 +20,7 @@ The CSV file will contain the following data:
 
 1. Clone this repository
 2. If you want to use a local elasticsearch running in a docker container you can just use the provided docker-compose.yml file
-3. Run teh program `go run main.go -src=PATH_TO_BUILD_SUMMARIES -fmt=es -es-address=ELASTIC_SEARCH_URL -username=ELASTICSEARCH_USER -password=ELASTICSEARCH_PASSWORD
+3. Run teh program `go run main.go -src=PATH_TO_BUILD_SUMMARIES -fmt=es -es-address=ELASTIC_SEARCH_URL -username=ELASTICSEARCH_USER -password=ELASTICSEARCH_PASSWORD`
 
 Username and Password are optional and depend on your installation. 
 
