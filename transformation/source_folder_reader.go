@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -58,8 +59,8 @@ func (p *sourceFolderReader) processFile(path string) (Release, ReactorSummary, 
 	// Start reading from the file with a reader.
 	reader := bufio.NewReader(file)
 
-	regexVersion := regexp.MustCompile("(\\[INFO\\] Reactor Summary for )(\\S*)( )([\\d\\.]+(-SNAPSHOT))(:)")      //group 4 = release number
-	regexModuleTime := regexp.MustCompile("(\\[INFO\\] )(\\S+)( \\.+ SUCCESS \\[\\s+)(\\d+\\.\\d+)( )(\\w+)(\\])") // group 2 = module, group 4 = duration, group 6 = scale
+	regexVersion := regexp.MustCompile("(\\[INFO\\] Reactor Summary for )(\\S*)( )([\\d\\.]+(-SNAPSHOT))(:)")           //group 4 = release number
+	regexModuleTime := regexp.MustCompile("(\\[INFO\\] )(\\S+)( \\.+ SUCCESS \\[\\s*)(\\d+[\\.\\:]\\d+)( )(\\w+)(\\])") // group 2 = module, group 4 = duration, group 6 = scale
 	for {
 		line, err := reader.ReadString('\n')
 		if err != nil {
@@ -77,7 +78,7 @@ func (p *sourceFolderReader) processFile(path string) (Release, ReactorSummary, 
 		if regexModuleTime.MatchString(line) {
 			matches := regexModuleTime.FindStringSubmatch(line)
 			module := matches[2]
-			durationString := matches[4] + p.mapDurationScale(matches[6])
+			durationString := p.normalizeDuration(matches[4], matches[6])
 			duration, err := time.ParseDuration(durationString)
 			if err != nil {
 				return release, summary, fmt.Errorf("Failed to get duration from %s; %s", line, err.Error())
@@ -91,9 +92,9 @@ func (p *sourceFolderReader) processFile(path string) (Release, ReactorSummary, 
 	return release, summary, nil
 }
 
-func (p *sourceFolderReader) mapDurationScale(input string) string {
-	if input == "min" {
-		return "m"
+func (p *sourceFolderReader) normalizeDuration(time string, scale string) string {
+	if scale == "min" {
+		return strings.ReplaceAll(time, ":", "m") + "s"
 	}
-	return input
+	return time + scale
 }

@@ -27,7 +27,7 @@ The CSV file will contain the following data:
 Username and Password are optional and depend on your installation. 
 
 When you use the provided docker setup (docker-compose.yml) you can run the tool with the command: 
-`go run main.go -src=PATH_TO_BUILD_SUMMARIES -fmt=csv -es-address=http://localhost:9200`
+`go run main.go -src=PATH_TO_BUILD_SUMMARIES -fmt=es -es-address=http://localhost:9200`
 
 The data in Elasticsearch contains:
 
